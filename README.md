@@ -7,7 +7,7 @@
     + https://phj918189.mycafe24.com/
 
 * React SPA 프로젝트(기상청)
-    + react-project-9abd5.web.app
+    + https://react-project-9abd5.web.app
 
 * 반응형 웹 프로젝트 (크로스핏)
     + http://phj918189.mycafe24.com/media/
