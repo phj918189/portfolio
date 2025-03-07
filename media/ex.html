@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+<style>
+    .hidden {
+        display: none;
+    }
+    
+    .popup {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .popup-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 400px;
+        max-width: 90%;
+    }
+    
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+    <article id="content">
+        <h2>Contact</h2>
+        <div class="map-container">
+            <div class="left">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3164.463438626996!2d126.83126327706309!3d37.52057137205056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357c9d8eb562e5cf%3A0x3fb7635aec2ccd39!2z7ZSE66as7YGs66Gc7Iqk7ZWP!5e0!3m2!1sko!2skr!4v1735544805805!5m2!1sko!2skr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div>
+                    <h3>오시는 길</h3>
+                    <p>
+                        <i class="fa-solid fa-bus"></i>
+                        6624, 6715, 603, 640, 6211
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-person-walking"></i>
+                        신월체육문화센터에서 하차 후 도보 1분
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-person-walking"></i>
+                        과학수사연구소입구에서 하차 후 도보 7분
+                    </p>
+                </div>
+            </div>
+            <div class="right contact-form">
+                <h3>문의하기</h3>
+                <div class="buttons">
+                    <button id="free-trial-btn">무료체험 신청</button>
+                    <button id="drop-in-btn">드랍인 문의 및 신청</button>
+                    <button id="consult-btn">상담 예약</button>
+                </div>
+            </div>
+        </div>
+    </article>
+    
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <span id="close-popup" class="close">&times;</span>
+            <div id="popup-form"></div>
+        </div>
+    </div>
+
+<script>
+    const popup = document.getElementById('popup');
+    const popupContent = document.getElementById('popup-form');
+    const closePopup = document.getElementById('close-popup');
+    
+    const forms = {
+        'free-trial': `
+            <h3>무료체험 신청</h3>
+            <form>
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" required>
+    
+                <label for="experience">크로스핏 경험 유무</label>
+                <select id="experience" name="experience" required>
+                    <option value="yes">있음</option>
+                    <option value="no">없음</option>
+                </select>
+    
+                <label for="time">시간</label>
+                <select id="time" name="time" required>
+                    <option>오전 9시</option>
+                    <option>오전 10시 30분</option>
+                    <option>오후 6시</option>
+                    <option>오후 7시 30분</option>
+                    <option>오후 9시</option>
+                </select>
+    
+                <label for="people">인원</label>
+                <input type="number" id="people" name="people" min="1" required>
+    
+                <button type="submit">신청하기</button>
+            </form>
+        `,
+        'drop-in': `
+            <h3>드랍인 문의 및 신청</h3>
+            <form>
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" required>
+    
+                <label for="people">인원</label>
+                <input type="number" id="people" name="people" min="1" required>
+    
+                <label for="time">시간</label>
+                <select id="time" name="time" required>
+                    <option>오전 9시</option>
+                    <option>오전 10시 30분</option>
+                    <option>오후 6시</option>
+                    <option>오후 7시 30분</option>
+                    <option>오후 9시</option>
+                    <option>Open Gym</option>
+                </select>
+    
+                <p>두당: 20,000원</p>
+                <p id="total-price">총합: 0원</p>
+    
+                <button type="submit">신청하기</button>
+            </form>
+        `,
+        'consult': `
+            <h3>상담 예약</h3>
+            <form>
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" required>
+    
+                <label for="experience">크로스핏 경험 유무</label>
+                <select id="experience" name="experience" required>
+                    <option value="yes">있음</option>
+                    <option value="no">없음</option>
+                </select>
+    
+                <label for="visit-time">방문 시간</label>
+                <input type="datetime-local" id="visit-time" name="visit-time" required>
+    
+                <button type="submit">예약하기</button>
+            </form>
+        `
+    };
+    
+    function openPopup(formKey) {
+        popupContent.innerHTML = forms[formKey];
+        popup.classList.remove('hidden');
+    }
+    
+    function closePopupHandler() {
+        popup.classList.add('hidden');
+        popupContent.innerHTML = '';
+    }
+    
+    document.getElementById('free-trial-btn').addEventListener('click', () => openPopup('free-trial'));
+    document.getElementById('drop-in-btn').addEventListener('click', () => openPopup('drop-in'));
+    document.getElementById('consult-btn').addEventListener('click', () => openPopup('consult'));
+    closePopup.addEventListener('click', closePopupHandler);
+    
+    popup.addEventListener('click', (event) => {
+        if (event.target === popup) {
+            closePopupHandler();
+        }
+    });
+    </script>
+</body>
+</html>
